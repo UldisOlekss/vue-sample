@@ -3,5 +3,29 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 </head>
 <body>
+    <ul id="app">
+        <li v-for="(item, index) in items">
+            {{ item.job.title }}
+        </li>
+    </ul>
+
+    <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        items: [
+          { job: {title: '' }}
+        ]
+      },
+      created: function () {
+        fetch('https://api.teleport.org/api/countries/iso_alpha2%3ALV/salaries/')
+        .then(response => response.json())
+        .then(data => {
+            app.items = data.salaries;
+        })
+        .catch(error => console.error(error));
+      }
+    });
+    </script>
 </body>
 </html>
