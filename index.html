@@ -5,7 +5,7 @@
 <body>
     <ul id="app">
         <li v-for="(item, index) in items">
-            {{ item.job.title }}
+            <span>{{ item.job.title }}</span> <span>{{ item.salary_percentiles.percentile_25 }}</span>
         </li>
     </ul>
 
@@ -14,9 +14,10 @@
       el: '#app',
       data: {
         items: [
-          { job: {title: '' }}
+          { job: {title: '' }, salary_percentiles: {percentile_25: '' }}
         ]
       },
+      
       created: function () {
         fetch('https://api.teleport.org/api/countries/iso_alpha2%3ALV/salaries/')
         .then(response => response.json())
