@@ -1,23 +1,47 @@
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/main-styles.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 </head>
 <body>
-    <ul id="app">
-        <li v-for="(item, index) in items">
-            <span>{{ item.job.title }}</span> <span>{{ item.salary_percentiles.percentile_25 }}</span>
-        </li>
-    </ul>
+    <div class="page-container">
+        <h1>Select jobs you are interested in</h1>
+        <div class="box">
+            <ul id="app">
+                <li v-for="(item, index) in items" class="jobName">
+                    <span class="title">{{ item.job.title }}</span>
+                    <span class="salary">{{ cleanSalary(index) }}</span>
+                </li>
+            </ul>
+        </div>
+        <h1>Jobs you are interested in:</h1>
+        <div class="box">
+            
+        </div>
+        <div id="button">
+            <button v-on:click="compileButton">Compile</button>
+        </div>
+    </div>
 
     <script>
+    //  creating vue instance
     var app = new Vue({
       el: '#app',
       data: {
         items: [
-          { job: {title: '' }, salary_percentiles: {percentile_25: '' }}
+          { job: {title: '' }, salary_percentiles: {percentile_50: '' }}
         ]
       },
-      
+      //  calculating salary to be shown
+      methods: {
+        cleanSalary: function(index) {
+            return (this.items[index].salary_percentiles.percentile_50 / 12).toFixed(2);
+        }
+      },
+      //  handling teleport response
       created: function () {
         fetch('https://api.teleport.org/api/countries/iso_alpha2%3ALV/salaries/')
         .then(response => response.json())
@@ -25,7 +49,7 @@
             app.items = data.salaries;
         })
         .catch(error => console.error(error));
-      }
+      },
     });
     </script>
 </body>
